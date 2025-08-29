@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE, getAuthHeaders } from '../../config/api';
 
 const AdminDashboard = () => {
   const { user, token } = useAuth();
@@ -16,9 +17,6 @@ const AdminDashboard = () => {
     department: ''
   });
 
-  const API_BASE = 'http://localhost:5000/api';
-  // const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
-
   useEffect(() => {
     if (user?.role === 'admin') {
       fetchAllUsers();
@@ -32,10 +30,7 @@ const AdminDashboard = () => {
   const fetchAllUsers = async () => {
     try {
       const response = await fetch(`${API_BASE}/auth/admin/all-users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: getAuthHeaders(token)
       });
 
       if (response.ok) {
@@ -62,10 +57,7 @@ const AdminDashboard = () => {
     try {
       const response = await fetch(`${API_BASE}/auth/admin/create-municipality-user`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: getAuthHeaders(token),
         body: JSON.stringify(formData)
       });
 
@@ -90,10 +82,7 @@ const AdminDashboard = () => {
     try {
       const response = await fetch(`${API_BASE}/auth/admin/users/${userId}/status`, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: getAuthHeaders(token),
         body: JSON.stringify({ isActive: !currentStatus })
       });
 
