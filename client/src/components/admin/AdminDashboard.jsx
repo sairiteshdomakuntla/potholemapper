@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     department: ''
   });
 
-  const API_BASE = 'http://localhost:5000/api';
+  const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
 
   useEffect(() => {
     if (user?.role === 'admin') {

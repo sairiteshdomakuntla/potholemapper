@@ -54,7 +54,7 @@ const initialState = {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const API_BASE = 'http://localhost:5000/api';
+  const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
 
   // Check authentication status on mount
   useEffect(() => {
