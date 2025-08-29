@@ -16,8 +16,8 @@ const AdminDashboard = () => {
     department: ''
   });
 
-  // const API_BASE='http:localhost:5000/api';
-  const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
+  const API_BASE = 'http://localhost:5000/api';
+  // const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -114,10 +114,10 @@ const AdminDashboard = () => {
 
   const getRoleBadgeColor = (role) => {
     switch(role) {
-      case 'admin': return 'bg-purple-100 text-purple-800';
-      case 'municipality': return 'bg-blue-100 text-blue-800';
-      case 'commuter': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'admin': return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+      case 'municipality': return 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+      case 'commuter': return 'bg-green-500/20 text-green-300 border-green-500/30';
+      default: return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
     }
   };
 
@@ -133,19 +133,21 @@ const AdminDashboard = () => {
   if (user?.role !== 'admin') {
     return (
       <div className="text-center py-8">
-        <p className="text-red-600">Access denied. Admin privileges required.</p>
+        <p className="text-red-400">Access denied. Admin privileges required.</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-white rounded-xl shadow-lg p-8">
+      <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">Admin Dashboard</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+            Admin Dashboard
+          </h2>
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-orange-500/25"
           >
             {showCreateForm ? 'Cancel' : 'Add Municipality User'}
           </button>
@@ -153,29 +155,29 @@ const AdminDashboard = () => {
 
         {/* User Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-lg p-6 text-white">
+          <div className="bg-gradient-to-r from-green-500/20 to-green-600/20 backdrop-blur-sm border border-green-500/30 rounded-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100">Commuters</p>
-                <p className="text-3xl font-bold">{stats.commuters}</p>
+                <p className="text-green-300">Commuters</p>
+                <p className="text-3xl font-bold text-white">{stats.commuters}</p>
               </div>
               <div className="text-4xl opacity-80">👥</div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg p-6 text-white">
+          <div className="bg-gradient-to-r from-blue-500/20 to-blue-600/20 backdrop-blur-sm border border-blue-500/30 rounded-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100">Municipality Staff</p>
-                <p className="text-3xl font-bold">{stats.municipality}</p>
+                <p className="text-blue-300">Municipality Staff</p>
+                <p className="text-3xl font-bold text-white">{stats.municipality}</p>
               </div>
               <div className="text-4xl opacity-80">🏛️</div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-lg p-6 text-white">
+          <div className="bg-gradient-to-r from-purple-500/20 to-purple-600/20 backdrop-blur-sm border border-purple-500/30 rounded-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100">Total Users</p>
-                <p className="text-3xl font-bold">{stats.total}</p>
+                <p className="text-purple-300">Total Users</p>
+                <p className="text-3xl font-bold text-white">{stats.total}</p>
               </div>
               <div className="text-4xl opacity-80">📊</div>
             </div>
@@ -184,35 +186,35 @@ const AdminDashboard = () => {
 
         {/* Create User Form */}
         {showCreateForm && (
-          <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Create Municipality User</h3>
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 mb-8">
+            <h3 className="text-xl font-semibold text-white mb-4">Create Municipality User</h3>
             <form onSubmit={handleCreateUser} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300 backdrop-blur-sm"
                   placeholder="Full name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300 backdrop-blur-sm"
                   placeholder="Email address"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
                 <input
                   type="password"
                   name="password"
@@ -220,31 +222,31 @@ const AdminDashboard = () => {
                   onChange={handleChange}
                   required
                   minLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300 backdrop-blur-sm"
                   placeholder="Password (min 6 characters)"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300 backdrop-blur-sm"
                   placeholder="Phone number"
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Department</label>
                 <input
                   type="text"
                   name="department"
                   value={formData.department}
                   onChange={handleChange}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition-all duration-300 backdrop-blur-sm"
                   placeholder="e.g., Road Maintenance, Public Works"
                 />
               </div>
@@ -252,7 +254,7 @@ const AdminDashboard = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-green-500/50 disabled:to-green-600/50 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 disabled:transform-none shadow-lg hover:shadow-green-500/25"
                 >
                   {loading ? 'Creating...' : 'Create User'}
                 </button>
@@ -262,33 +264,33 @@ const AdminDashboard = () => {
         )}
 
         {/* Filter Tabs */}
-        <div className="flex space-x-1 mb-6 bg-gray-100 p-1 rounded-lg">
+        <div className="flex space-x-1 mb-6 bg-white/5 backdrop-blur-sm p-1 rounded-lg border border-white/10">
           <button
             onClick={() => setActiveFilter('all')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
               activeFilter === 'all'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                : 'text-gray-300 hover:text-white hover:bg-white/5'
             }`}
           >
             All Users ({stats.total})
           </button>
           <button
             onClick={() => setActiveFilter('commuter')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
               activeFilter === 'commuter'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                : 'text-gray-300 hover:text-white hover:bg-white/5'
             }`}
           >
             Commuters ({stats.commuters})
           </button>
           <button
             onClick={() => setActiveFilter('municipality')}
-            className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
+            className={`flex-1 py-2 px-4 rounded-md font-medium transition-all duration-300 ${
               activeFilter === 'municipality'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                : 'text-gray-300 hover:text-white hover:bg-white/5'
             }`}
           >
             Municipality ({stats.municipality})
@@ -298,56 +300,56 @@ const AdminDashboard = () => {
         {/* Users List */}
         <div>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead className="bg-gray-50">
+            <table className="min-w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg">
+              <thead className="bg-white/5">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Department</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Joined</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white/5 divide-y divide-white/10">
                 {filteredUsers.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.email}</td>
+                  <tr key={user._id} className="hover:bg-white/5 transition-colors duration-200">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getRoleBadgeColor(user.role)}`}>
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${getRoleBadgeColor(user.role)}`}>
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {user.department || '-'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {user.phone || '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${
                         user.isActive 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-500/20 text-green-300 border-green-500/30' 
+                          : 'bg-red-500/20 text-red-300 border-red-500/30'
                       }`}>
                         {user.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       {user.role !== 'admin' && (
                         <button
                           onClick={() => toggleUserStatus(user._id, user.isActive)}
-                          className={`${
+                          className={`transition-colors duration-300 ${
                             user.isActive 
-                              ? 'text-red-600 hover:text-red-900' 
-                              : 'text-green-600 hover:text-green-900'
-                          } transition-colors`}
+                              ? 'text-red-400 hover:text-red-300' 
+                              : 'text-green-400 hover:text-green-300'
+                          }`}
                         >
                           {user.isActive ? 'Deactivate' : 'Activate'}
                         </button>
@@ -358,7 +360,7 @@ const AdminDashboard = () => {
               </tbody>
             </table>
             {filteredUsers.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-400">
                 No users found for the selected filter.
               </div>
             )}

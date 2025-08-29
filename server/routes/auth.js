@@ -57,18 +57,12 @@ router.post('/signup', signupValidation, async (req, res) => {
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id);
 
-    // Set refresh token as httpOnly cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-
+    // Remove cookie setting - just return tokens
     res.status(201).json({
       message: 'Commuter account created successfully',
       user,
-      accessToken
+      accessToken,
+      refreshToken // Send refresh token in response body
     });
 
   } catch (error) {
@@ -240,18 +234,12 @@ router.post('/login', loginValidation, async (req, res) => {
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id);
 
-    // Set refresh token as httpOnly cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-
+    // Remove cookie setting - just return tokens
     res.json({
       message: 'Login successful',
       user,
-      accessToken
+      accessToken,
+      refreshToken // Send refresh token in response body
     });
 
   } catch (error) {
@@ -260,10 +248,11 @@ router.post('/login', loginValidation, async (req, res) => {
   }
 });
 
-// Refresh token
+// Update refresh token endpoint
 router.post('/refresh', async (req, res) => {
   try {
-    const { refreshToken } = req.cookies;
+    // Get refresh token from request body instead of cookies
+    const { refreshToken } = req.body;
 
     if (!refreshToken) {
       return res.status(401).json({ error: 'Refresh token required' });
@@ -278,24 +267,20 @@ router.post('/refresh', async (req, res) => {
 
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id);
 
-    // Update refresh token cookie
-    res.cookie('refreshToken', newRefreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    // Return new tokens in response body
+    res.json({ 
+      accessToken,
+      refreshToken: newRefreshToken
     });
-
-    res.json({ accessToken });
 
   } catch (error) {
     res.status(401).json({ error: 'Invalid refresh token' });
   }
 });
 
-// Logout
+// Logout - simplified since no cookies
 router.post('/logout', (req, res) => {
-  res.clearCookie('refreshToken');
+  // No cookie clearing needed
   res.json({ message: 'Logged out successfully' });
 });
 

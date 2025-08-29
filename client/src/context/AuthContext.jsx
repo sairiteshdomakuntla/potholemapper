@@ -54,8 +54,8 @@ const initialState = {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  // const API_BASE='http:localhost:5000/api';
-  const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
+  const API_BASE='http://localhost:5000/api';
+  // const API_BASE = 'https://potholemapper-4gpw.onrender.com/api';
 
   // Check authentication status on mount
   useEffect(() => {
@@ -75,8 +75,7 @@ export const AuthProvider = ({ children }) => {
       const response = await fetch(`${API_BASE}/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
-        },
-        credentials: 'include'
+        }
       });
 
       if (response.ok) {
@@ -106,7 +105,6 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include',
         body: JSON.stringify(userData)
       });
 
@@ -149,7 +147,6 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include',
         body: JSON.stringify(credentials)
       });
 
@@ -158,6 +155,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem('refreshToken', data.refreshToken); // Store refresh token
         dispatch({
           type: 'LOGIN_SUCCESS',
           payload: data
@@ -184,14 +182,14 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await fetch(`${API_BASE}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include'
+        method: 'POST'
       });
     } catch (error) {
       console.error('Logout error:', error);
     }
     
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken'); // Remove refresh token
     dispatch({ type: 'LOGOUT' });
   };
 

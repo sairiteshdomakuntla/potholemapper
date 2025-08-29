@@ -1,6 +1,5 @@
 const exp = require('express');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const connect = require('./config/db');
 
@@ -11,11 +10,11 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 // Middleware
 app.use(cors({
-  origin: CLIENT_URL,
-  credentials: true
+  origin: CLIENT_URL, // This will be 'http://localhost:5173'
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(exp.json());
-app.use(cookieParser());
 
 // Routes
 app.get('/api/hello', (req, res) => {

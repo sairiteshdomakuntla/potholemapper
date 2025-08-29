@@ -32,35 +32,37 @@ const Dashboard = () => {
 
   const getSeverityColor = (severity) => {
     switch(severity.toLowerCase()) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'high': return 'bg-red-500/20 text-red-300 border-red-500/30';
+      case 'medium': return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30';
+      case 'low': return 'bg-green-500/20 text-green-300 border-green-500/30';
+      default: return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Stats Overview */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-            <p className="text-gray-600 mt-2">Track and manage pothole reports in your area</p>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+              Dashboard
+            </h1>
+            <p className="text-gray-300 mt-2">Track and manage pothole reports in your area</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-orange-400">
-              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.reported.length}</div>
-              <div className="text-lg text-gray-600 font-medium">Reported</div>
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-all duration-300 border-l-4 border-l-orange-400">
+              <div className="text-4xl font-bold text-white mb-2">{potholes.reported.length}</div>
+              <div className="text-lg text-gray-300 font-medium">Reported</div>
             </div>
-            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-blue-400">
-              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.underRepair.length}</div>
-              <div className="text-lg text-gray-600 font-medium">Under Repair</div>
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-all duration-300 border-l-4 border-l-blue-400">
+              <div className="text-4xl font-bold text-white mb-2">{potholes.underRepair.length}</div>
+              <div className="text-lg text-gray-300 font-medium">Under Repair</div>
             </div>
-            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-green-400">
-              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.finished.length}</div>
-              <div className="text-lg text-gray-600 font-medium">Completed</div>
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-all duration-300 border-l-4 border-l-green-400">
+              <div className="text-4xl font-bold text-white mb-2">{potholes.finished.length}</div>
+              <div className="text-lg text-gray-300 font-medium">Completed</div>
             </div>
           </div>
         </div>
@@ -75,31 +77,31 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">📍</span>
-                <h3 className="text-2xl font-bold text-gray-800">Potholes Reported</h3>
+                <h3 className="text-2xl font-bold text-white">Potholes Reported</h3>
               </div>
-              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+              <span className="bg-white/10 border border-white/20 text-gray-300 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
                 {potholes.reported.length} items
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {potholes.reported.map(pothole => (
-                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-orange-400">
+                <div key={pothole.id} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-6 hover:shadow-xl hover:bg-white/10 transition-all duration-300 border-l-4 border-l-orange-400">
                   <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(pothole.severity)}`}>
+                    <h4 className="text-lg font-semibold text-white flex-1">{pothole.location}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSeverityColor(pothole.severity)}`}>
                       {pothole.severity}
                     </span>
                   </div>
-                  <div className="space-y-2 mb-6 text-gray-600">
+                  <div className="space-y-2 mb-6 text-gray-300">
                     <p><span className="font-medium">Reported:</span> {pothole.reportedDate}</p>
                     <p><span className="font-medium">Reporter:</span> {pothole.reporter}</p>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                    <button className="flex-1 bg-white/10 border border-white/20 hover:bg-white/20 text-gray-300 py-2 px-4 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm">
                       View Details
                     </button>
                     {(user?.role === 'municipality' || user?.role === 'admin') && (
-                      <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                      <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
                         Start Repair
                       </button>
                     )}
@@ -114,33 +116,33 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🚧</span>
-                <h3 className="text-2xl font-bold text-gray-800">Under Repair</h3>
+                <h3 className="text-2xl font-bold text-white">Under Repair</h3>
               </div>
-              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+              <span className="bg-white/10 border border-white/20 text-gray-300 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
                 {potholes.underRepair.length} items
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {potholes.underRepair.map(pothole => (
-                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-blue-400">
+                <div key={pothole.id} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-6 hover:shadow-xl hover:bg-white/10 transition-all duration-300 border-l-4 border-l-blue-400">
                   <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(pothole.severity)}`}>
+                    <h4 className="text-lg font-semibold text-white flex-1">{pothole.location}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSeverityColor(pothole.severity)}`}>
                       {pothole.severity}
                     </span>
                   </div>
-                  <div className="space-y-2 mb-4 text-gray-600">
+                  <div className="space-y-2 mb-4 text-gray-300">
                     <p><span className="font-medium">Started:</span> {pothole.startDate}</p>
                     <p><span className="font-medium">Est. Completion:</span> {pothole.estimatedCompletion}</p>
                   </div>
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-700">Progress</span>
-                      <span className="text-sm font-medium text-blue-600">{pothole.progress}%</span>
+                      <span className="text-sm font-medium text-gray-300">Progress</span>
+                      <span className="text-sm font-medium text-blue-400">{pothole.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-white/10 rounded-full h-2 backdrop-blur-sm">
                       <div 
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                        className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full transition-all duration-300 shadow-sm" 
                         style={{width: `${pothole.progress}%`}}
                       ></div>
                     </div>
@@ -148,10 +150,10 @@ const Dashboard = () => {
                   <div className="flex space-x-2">
                     {(user?.role === 'municipality' || user?.role === 'admin') && (
                       <>
-                        <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                        <button className="flex-1 bg-white/10 border border-white/20 hover:bg-white/20 text-gray-300 py-2 px-4 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm">
                           Update Progress
                         </button>
-                        <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
                           Mark Complete
                         </button>
                       </>
@@ -167,32 +169,32 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-8">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">✅</span>
-                <h3 className="text-2xl font-bold text-gray-800">Completed Repairs</h3>
+                <h3 className="text-2xl font-bold text-white">Completed Repairs</h3>
               </div>
-              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+              <span className="bg-white/10 border border-white/20 text-gray-300 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
                 {potholes.finished.length} items
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {potholes.finished.map(pothole => (
-                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-green-400">
+                <div key={pothole.id} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-6 hover:shadow-xl hover:bg-white/10 transition-all duration-300 border-l-4 border-l-green-400">
                   <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                    <h4 className="text-lg font-semibold text-white flex-1">{pothole.location}</h4>
+                    <span className="bg-green-500/20 text-green-300 border border-green-500/30 px-3 py-1 rounded-full text-xs font-semibold">
                       Completed
                     </span>
                   </div>
-                  <div className="space-y-2 mb-6 text-gray-600">
+                  <div className="space-y-2 mb-6 text-gray-300">
                     <p><span className="font-medium">Completed:</span> {pothole.completedDate}</p>
                     <p><span className="font-medium">Duration:</span> {pothole.duration}</p>
                     <p><span className="font-medium">Original Severity:</span> {pothole.severity}</p>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                    <button className="flex-1 bg-white/10 border border-white/20 hover:bg-white/20 text-gray-300 py-2 px-4 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm">
                       View Report
                     </button>
                     {(user?.role === 'admin') && (
-                      <button className="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-500 py-2 px-4 rounded-lg font-medium transition-colors border border-gray-200">
+                      <button className="flex-1 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 py-2 px-4 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm">
                         Archive
                       </button>
                     )}
