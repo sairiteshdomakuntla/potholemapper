@@ -1,0 +1,211 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+
+const Dashboard = () => {
+  const { user } = useAuth();
+  const [potholes, setPotholes] = useState({
+    reported: [],
+    underRepair: [],
+    finished: []
+  });
+
+  // Mock data for demonstration - replace with actual API calls
+  useEffect(() => {
+    const mockData = {
+      reported: [
+        { id: 1, location: "Main Street & 5th Ave", severity: "High", reportedDate: "2025-08-15", reporter: "John Doe" },
+        { id: 2, location: "Oak Road near Park", severity: "Medium", reportedDate: "2025-08-14", reporter: "Jane Smith" },
+        { id: 3, location: "Highway 101 Exit 15", severity: "Low", reportedDate: "2025-08-13", reporter: "Mike Johnson" }
+      ],
+      underRepair: [
+        { id: 4, location: "First Street Plaza", severity: "High", startDate: "2025-08-10", estimatedCompletion: "2025-08-20", progress: 60 },
+        { id: 5, location: "Downtown Bridge", severity: "Medium", startDate: "2025-08-12", estimatedCompletion: "2025-08-18", progress: 35 }
+      ],
+      finished: [
+        { id: 6, location: "Park Avenue", severity: "Medium", completedDate: "2025-08-08", duration: "3 days" },
+        { id: 7, location: "School Zone Road", severity: "High", completedDate: "2025-08-05", duration: "5 days" },
+        { id: 8, location: "Market Street", severity: "Low", completedDate: "2025-08-03", duration: "2 days" }
+      ]
+    };
+    setPotholes(mockData);
+  }, []);
+
+  const getSeverityColor = (severity) => {
+    switch(severity.toLowerCase()) {
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Stats Overview */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+            <p className="text-gray-600 mt-2">Track and manage pothole reports in your area</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-orange-400">
+              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.reported.length}</div>
+              <div className="text-lg text-gray-600 font-medium">Reported</div>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-blue-400">
+              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.underRepair.length}</div>
+              <div className="text-lg text-gray-600 font-medium">Under Repair</div>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center transform hover:scale-105 transition-transform border-l-4 border-green-400">
+              <div className="text-4xl font-bold text-gray-800 mb-2">{potholes.finished.length}</div>
+              <div className="text-lg text-gray-600 font-medium">Completed</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          {/* Potholes Reported Section */}
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">📍</span>
+                <h3 className="text-2xl font-bold text-gray-800">Potholes Reported</h3>
+              </div>
+              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+                {potholes.reported.length} items
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {potholes.reported.map(pothole => (
+                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-orange-400">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(pothole.severity)}`}>
+                      {pothole.severity}
+                    </span>
+                  </div>
+                  <div className="space-y-2 mb-6 text-gray-600">
+                    <p><span className="font-medium">Reported:</span> {pothole.reportedDate}</p>
+                    <p><span className="font-medium">Reporter:</span> {pothole.reporter}</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                      View Details
+                    </button>
+                    {(user?.role === 'municipality' || user?.role === 'admin') && (
+                      <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        Start Repair
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Under Repair Section */}
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">🚧</span>
+                <h3 className="text-2xl font-bold text-gray-800">Under Repair</h3>
+              </div>
+              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+                {potholes.underRepair.length} items
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {potholes.underRepair.map(pothole => (
+                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-blue-400">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(pothole.severity)}`}>
+                      {pothole.severity}
+                    </span>
+                  </div>
+                  <div className="space-y-2 mb-4 text-gray-600">
+                    <p><span className="font-medium">Started:</span> {pothole.startDate}</p>
+                    <p><span className="font-medium">Est. Completion:</span> {pothole.estimatedCompletion}</p>
+                  </div>
+                  <div className="mb-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-700">Progress</span>
+                      <span className="text-sm font-medium text-blue-600">{pothole.progress}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                        style={{width: `${pothole.progress}%`}}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    {(user?.role === 'municipality' || user?.role === 'admin') && (
+                      <>
+                        <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                          Update Progress
+                        </button>
+                        <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                          Mark Complete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Completed Section */}
+          <section>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">✅</span>
+                <h3 className="text-2xl font-bold text-gray-800">Completed Repairs</h3>
+              </div>
+              <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium">
+                {potholes.finished.length} items
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {potholes.finished.map(pothole => (
+                <div key={pothole.id} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow border-l-4 border-green-400">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-gray-800 flex-1">{pothole.location}</h4>
+                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                      Completed
+                    </span>
+                  </div>
+                  <div className="space-y-2 mb-6 text-gray-600">
+                    <p><span className="font-medium">Completed:</span> {pothole.completedDate}</p>
+                    <p><span className="font-medium">Duration:</span> {pothole.duration}</p>
+                    <p><span className="font-medium">Original Severity:</span> {pothole.severity}</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors">
+                      View Report
+                    </button>
+                    {(user?.role === 'admin') && (
+                      <button className="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-500 py-2 px-4 rounded-lg font-medium transition-colors border border-gray-200">
+                        Archive
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
