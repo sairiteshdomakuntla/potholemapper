@@ -7,34 +7,32 @@ const authReducer = (state, action) => {
     case 'LOGIN_START':
       return { ...state, loading: true, error: null };
     case 'LOGIN_SUCCESS':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: true, 
-        user: action.payload.user, 
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user,
         token: action.payload.accessToken,
-        error: null 
+        loading: false,
+        error: null
       };
     case 'LOGIN_FAILURE':
-      return { 
-        ...state, 
-        loading: false, 
-        isAuthenticated: false, 
-        user: null, 
-        token: null, 
-        error: action.payload 
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null,
+        token: null,
+        loading: false,
+        error: action.payload
       };
     case 'LOGOUT':
-      return { 
-        ...state, 
-        loading: false, // Ensure loading is false on logout
-        isAuthenticated: false, 
-        user: null, 
-        token: null, 
-        error: null 
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null,
+        token: null,
+        loading: false,
+        error: null
       };
-    case 'SET_TOKEN':
-      return { ...state, token: action.payload };
     case 'CLEAR_ERROR':
       return { ...state, error: null };
     case 'SET_LOADING':
@@ -48,7 +46,7 @@ const initialState = {
   isAuthenticated: false,
   user: null,
   token: null,
-  loading: false, // Change this to false initially
+  loading: true, // Set to true initially to show loading while checking auth
   error: null
 };
 
@@ -69,8 +67,6 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    dispatch({ type: 'SET_LOADING', payload: true });
-
     try {
       const response = await fetch(`${API_BASE}/auth/me`, {
         headers: {
@@ -85,12 +81,62 @@ export const AuthProvider = ({ children }) => {
           payload: { user: data.user, accessToken: token }
         });
       } else {
-        localStorage.removeItem('accessToken');
-        dispatch({ type: 'LOGOUT' });
+        // Token is invalid, try to refresh
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+          try {
+            const refreshResponse = await fetch(`${API_BASE}/auth/refresh`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ refreshToken })
+            });
+
+            if (refreshResponse.ok) {
+              const refreshData = await refreshResponse.json();
+              localStorage.setItem('accessToken', refreshData.accessToken);
+              localStorage.setItem('refreshToken', refreshData.refreshToken);
+              
+              // Get user data with new token
+              const userResponse = await fetch(`${API_BASE}/auth/me`, {
+                headers: {
+                  'Authorization': `Bearer ${refreshData.accessToken}`
+                }
+              });
+
+              if (userResponse.ok) {
+                const userData = await userResponse.json();
+                dispatch({
+                  type: 'LOGIN_SUCCESS',
+                  payload: { user: userData.user, accessToken: refreshData.accessToken }
+                });
+              } else {
+                throw new Error('Failed to get user data with refreshed token');
+              }
+            } else {
+              throw new Error('Token refresh failed');
+            }
+          } catch (refreshError) {
+            console.error('Token refresh failed:', refreshError);
+            // Clear invalid tokens
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            dispatch({ type: 'LOGOUT' });
+          }
+        } else {
+          // No refresh token, user needs to login again
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          dispatch({ type: 'LOGOUT' });
+        }
       }
     } catch (error) {
-      localStorage.removeItem('accessToken');
-      dispatch({ type: 'LOGOUT' });
+      console.error('Auth check failed:', error);
+      // Don't clear tokens on network errors, just set loading to false
+      dispatch({ type: 'SET_LOADING', payload: false });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
 
@@ -113,6 +159,9 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         localStorage.setItem('accessToken', data.accessToken);
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
         dispatch({
           type: 'LOGIN_SUCCESS',
           payload: data
@@ -155,7 +204,9 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken); // Store refresh token
+        if (data.refreshToken) {
+          localStorage.setItem('refreshToken', data.refreshToken);
+        }
         dispatch({
           type: 'LOGIN_SUCCESS',
           payload: data
@@ -181,15 +232,21 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch(`${API_BASE}/auth/logout`, {
-        method: 'POST'
-      });
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        await fetch(`${API_BASE}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      }
     } catch (error) {
       console.error('Logout error:', error);
     }
     
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken'); // Remove refresh token
+    localStorage.removeItem('refreshToken');
     dispatch({ type: 'LOGOUT' });
   };
 
