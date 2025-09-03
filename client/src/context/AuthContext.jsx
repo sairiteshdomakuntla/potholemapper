@@ -3,6 +3,11 @@ import { API_BASE } from '../config/api'; // Import from your api config
 
 const AuthContext = createContext();
 
+const normalizeUser = (user) => {
+  if (!user) return null;
+  return { ...user, id: user._id || user.id };
+};
+
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN_START':
@@ -11,7 +16,7 @@ const authReducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        user: normalizeUser(action.payload.user),
         token: action.payload.accessToken,
         loading: false,
         error: null
@@ -77,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         dispatch({
           type: 'LOGIN_SUCCESS',
-          payload: { user: data.user, accessToken: token }
+          payload: { user: normalizeUser(data.user), accessToken: token }
         });
       } else {
         // Token is invalid, try to refresh
@@ -108,7 +113,7 @@ export const AuthProvider = ({ children }) => {
                 const userData = await userResponse.json();
                 dispatch({
                   type: 'LOGIN_SUCCESS',
-                  payload: { user: userData.user, accessToken: refreshData.accessToken }
+                  payload: { user: normalizeUser(userData.user), accessToken: refreshData.accessToken }
                 });
               } else {
                 throw new Error('Failed to get user data with refreshed token');
@@ -163,7 +168,7 @@ export const AuthProvider = ({ children }) => {
         }
         dispatch({
           type: 'LOGIN_SUCCESS',
-          payload: data
+          payload: { user: normalizeUser(data.user), accessToken: data.accessToken }
         });
         return { success: true };
       } else {
@@ -208,7 +213,7 @@ export const AuthProvider = ({ children }) => {
         }
         dispatch({
           type: 'LOGIN_SUCCESS',
-          payload: data
+          payload: { user: normalizeUser(data.user), accessToken: data.accessToken }
         });
         return { success: true };
       } else {

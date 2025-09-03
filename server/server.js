@@ -21,7 +21,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-app.use(exp.json());
+// app.use(exp.json());
+app.use(exp.json({ limit: "10mb" })); // allow up to 10MB JSON payloads
+app.use(exp.urlencoded({ limit: "10mb", extended: true }));
 
 // Routes
 app.get('/api/hello', (req, res) => {
@@ -30,6 +32,9 @@ app.get('/api/hello', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', require('./routes/auth'));
+
+// Report routes
+app.use('/api/report', require('./routes/reportroute'));
 
 // Connect DB, then start server
 connect().then(() => {

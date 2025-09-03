@@ -11,23 +11,12 @@ const Dashboard = () => {
 
   // Mock data for demonstration - replace with actual API calls
   useEffect(() => {
-    const mockData = {
-      reported: [
-        { id: 1, location: "Main Street & 5th Ave", severity: "High", reportedDate: "2025-08-15", reporter: "John Doe" },
-        { id: 2, location: "Oak Road near Park", severity: "Medium", reportedDate: "2025-08-14", reporter: "Jane Smith" },
-        { id: 3, location: "Highway 101 Exit 15", severity: "Low", reportedDate: "2025-08-13", reporter: "Mike Johnson" }
-      ],
-      underRepair: [
-        { id: 4, location: "First Street Plaza", severity: "High", startDate: "2025-08-10", estimatedCompletion: "2025-08-20", progress: 60 },
-        { id: 5, location: "Downtown Bridge", severity: "Medium", startDate: "2025-08-12", estimatedCompletion: "2025-08-18", progress: 35 }
-      ],
-      finished: [
-        { id: 6, location: "Park Avenue", severity: "Medium", completedDate: "2025-08-08", duration: "3 days" },
-        { id: 7, location: "School Zone Road", severity: "High", completedDate: "2025-08-05", duration: "5 days" },
-        { id: 8, location: "Market Street", severity: "Low", completedDate: "2025-08-03", duration: "2 days" }
-      ]
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:5000/api/report/pothole/${user.id}`);
+      const data = await res.json();
+      setPotholes(data);
     };
-    setPotholes(mockData);
+    fetchData();
   }, []);
 
   const getSeverityColor = (severity) => {
@@ -93,8 +82,8 @@ const Dashboard = () => {
                     </span>
                   </div>
                   <div className="space-y-2 mb-6 text-gray-300">
-                    <p><span className="font-medium">Reported:</span> {pothole.reportedDate}</p>
-                    <p><span className="font-medium">Reporter:</span> {pothole.reporter}</p>
+                    <p><span className="font-medium">Reported:</span>  {new Date(pothole.dateOfSubmission).toLocaleDateString()}</p>
+                    <p><span className="font-medium">Reporter:</span> {user.name}</p>
                   </div>
                   <div className="flex space-x-2">
                     <button className="flex-1 bg-white/10 border border-white/20 hover:bg-white/20 text-gray-300 py-2 px-4 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm">
@@ -138,7 +127,7 @@ const Dashboard = () => {
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-300">Progress</span>
-                      <span className="text-sm font-medium text-blue-400">{pothole.progress}%</span>
+                      <span className="text-sm font-medium text-blue-400">95%</span>
                     </div>
                     <div className="w-full bg-white/10 rounded-full h-2 backdrop-blur-sm">
                       <div 
