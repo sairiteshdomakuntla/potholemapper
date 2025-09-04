@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const ReportPothole = () => {
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     location: '',
     description: '',
@@ -37,14 +39,14 @@ const ReportPothole = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black py-12">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-black' : 'bg-white'} py-12`}>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-lg p-8">
+        <div className={`${theme === 'dark' ? 'bg-white/5 border-white/10' : 'bg-gray-800/5 border-gray-300/20'} backdrop-blur-lg border rounded-xl shadow-lg p-8`}>
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+            <h1 className={`text-3xl font-bold bg-gradient-to-r ${theme === 'dark' ? 'from-white to-orange-400' : 'from-gray-900 to-orange-600'} bg-clip-text text-transparent`}>
               Report a Pothole
             </h1>
-            <p className="text-gray-300 mt-2">Help improve road safety by reporting potholes in your area</p>
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mt-2`}>Help improve road safety by reporting potholes in your area</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

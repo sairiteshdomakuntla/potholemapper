@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const Signup = ({ onSwitchToLogin, onSuccess }) => {
   const { signup, loading, error, clearError } = useAuth();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
