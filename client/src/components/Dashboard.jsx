@@ -786,13 +786,6 @@ const Dashboard = () => {
                 </table>
                 </div>
               </div>
-
-              {/* Floating scroll hint */}
-              <div className={`absolute bottom-4 right-4 ${theme === 'dark' ? 'bg-gray-800/90 text-gray-300 border-gray-600' : 'bg-white/90 text-gray-600 border-gray-300'} px-3 py-2 rounded-lg text-xs border backdrop-blur-sm shadow-lg transition-opacity duration-300`}>
-                <div className="flex items-center space-x-2">
-                  <span>Scroll for more</span>
-                </div>
-              </div>
             </div>
 
             {/* Modal Footer - Fixed */}
