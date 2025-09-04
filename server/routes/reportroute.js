@@ -63,9 +63,9 @@ const underRepair = await Pothole.find({submittedBy:req.params.id,status:"in pro
 const finished = await Pothole.find({submittedBy:req.params.id,status:"completed"}).lean();
 
 res.json({
-  reported: reported.map(p => ({ ...p, id: p._id })),
-  underRepair: underRepair.map(p => ({ ...p, id: p._id })),
-  finished: finished.map(p => ({ ...p, id: p._id }))
+  reported: reported.map(p => ({ ...p, id: p._id,mapUrl:`https://www.google.com/maps?q=${p.latitude},${p.longitude}&z=15&output=embed` })),
+  underRepair: underRepair.map(p => ({ ...p, id: p._id,mapUrl:`https://www.google.com/maps?q=${p.latitude},${p.longitude}&z=15&output=embed` })),
+  finished: finished.map(p => ({ ...p, id: p._id,mapUrl:`https://www.google.com/maps?q=${p.latitude},${p.longitude}&z=15&output=embed` })),
 });
 
   } catch (err) {
