@@ -15,7 +15,7 @@ const Layout = () => {
   };
 
   const getRoleBadgeColor = (role) => {
-    switch(role) {
+    switch (role) {
       case 'admin': return 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
       case 'municipality': return 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
       case 'commuter': return 'bg-green-500/20 text-green-300 border border-green-500/30';
@@ -23,9 +23,7 @@ const Layout = () => {
     }
   };
 
-  const isActivePage = (path) => {
-    return location.pathname === path;
-  };
+  const isActivePage = (path) => location.pathname === path;
 
   return (
     <div className="min-h-screen bg-black">
@@ -49,42 +47,36 @@ const Layout = () => {
                     </span>
                     <span className="text-white/90">Welcome, {user?.name}</span>
                   </div>
-                  
-                  <Link
-                    to="/report"
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-orange-500/25"
-                  >
-                    Report Pothole
-                  </Link>
-                  
-                  <Link
-                    to="/dashboard"
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
-                      isActivePage('/dashboard') 
-                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25' 
-                        : 'bg-white/10 border border-white/20 hover:bg-white/20'
-                    }`}
-                  >
-                    Dashboard
-                  </Link>
 
-                  <Link
-                    to="/map"
-                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
-                      isActivePage('/map') 
-                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25' 
-                        : 'bg-white/10 border border-white/20 hover:bg-white/20'
-                    }`}
-                  >
-                    Map View
-                  </Link>
-                  
+                  {/* Role-based Navigation */}
+                  {user?.role === 'commuter' && (
+                    <>
+                      <Link
+                        to="/report"
+                        className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-4 py-2 rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-orange-500/25"
+                      >
+                        Report Pothole
+                      </Link>
+
+                      <Link
+                        to="/dashboard"
+                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
+                          isActivePage('/dashboard')
+                            ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                            : 'bg-white/10 border border-white/20 hover:bg-white/20'
+                        }`}
+                      >
+                        Dashboard
+                      </Link>
+                    </>
+                  )}
+
                   {user?.role === 'admin' && (
                     <Link
                       to="/admin"
                       className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
-                        isActivePage('/admin') 
-                          ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25' 
+                        isActivePage('/admin')
+                          ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
                           : 'bg-white/10 border border-white/20 hover:bg-white/20'
                       }`}
                     >
@@ -92,17 +84,44 @@ const Layout = () => {
                     </Link>
                   )}
 
+                  {user?.role === 'municipality' && (
+                    <Link
+                      to="/municipal"
+                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
+                        isActivePage('/municipal')
+                          ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                          : 'bg-white/10 border border-white/20 hover:bg-white/20'
+                      }`}
+                    >
+                      Municipal Dashboard
+                    </Link>
+                  )}
+
+                  {/* Map (shared) */}
+                  <Link
+                    to="/map"
+                    className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
+                      isActivePage('/map')
+                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                        : 'bg-white/10 border border-white/20 hover:bg-white/20'
+                    }`}
+                  >
+                    Map View
+                  </Link>
+
+                  {/* Profile */}
                   <Link
                     to="/profile"
                     className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm ${
-                      isActivePage('/profile') 
-                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25' 
+                      isActivePage('/profile')
+                        ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
                         : 'bg-white/10 border border-white/20 hover:bg-white/20'
                     }`}
                   >
                     Profile
                   </Link>
                   
+                  {/* Logout */}
                   <button 
                     onClick={handleLogout}
                     className="bg-white/10 border border-white/20 hover:bg-white/20 px-4 py-2 rounded-lg font-medium transition-all duration-300 backdrop-blur-sm"

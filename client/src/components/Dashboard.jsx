@@ -565,11 +565,11 @@ useEffect(() => {
                         </td>
 
                         {/* Date */}
-                        {/* <td className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} px-6 py-4 font-medium`}>
+                        <td className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} px-6 py-4 font-medium`}>
                           {modalType === 'underRepair' ? item.startDate : 
                            modalType === 'finished' ? item.completedDate : 
-                           item.reportedDate}
-                        </td> */}
+                           new Date(item.dateOfSubmission).toLocaleDateString()}
+                        </td>
 
                         {/* Severity */}
                         <td className="px-6 py-4">

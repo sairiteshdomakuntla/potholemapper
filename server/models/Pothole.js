@@ -40,6 +40,16 @@ const potholeSchema = new mongoose.Schema({
     enum: ["reported", "in progress", "completed"],
     default: "reported",
   },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",   // reference to Municipality user
+  },
+  dateOfCompletion: {
+    type: Date,
+  },
+  assignedDate: {
+    type: Date,
+  },
 });
 
 
