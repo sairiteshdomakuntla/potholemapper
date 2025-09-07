@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config/api'; 
 import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
@@ -19,7 +20,7 @@ const Dashboard = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/report/pothole/${user.id}`);
+      const res = await fetch(`${API_BASE}/report/pothole/${user.id}`);
       const data = await res.json();
       setPotholes(data);
       // console.log("Fetched pothole data:", data);
